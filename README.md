@@ -1,4 +1,4 @@
-![My Image](src/images/main-page_image.png)
+![My Image](assets/app-screenshot.png)
 
 Chat App
 

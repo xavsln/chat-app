@@ -20,17 +20,7 @@ export default class Chat extends React.Component {
         }}
       >
         <Text>Hello from the Chat screen!</Text>
-        {/* <Text>Screen color should be: {screenColor}</Text> */}
       </View>
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     // backgroundColor: { screenColor },
-//   },
-// });

@@ -30,11 +30,6 @@ export default class Start extends React.Component {
 
           {/* -- User Welcome area - User can enter name, select background color and move to Chat page -- */}
           <View style={styles.welcomeBox}>
-            {/* <Image
-              source={require("../assets/inputTextIcon.svg")}
-              style={{ width: 40, height: 40 }}
-            /> */}
-
             <TextInput
               style={styles.inputText}
               onChangeText={(text) => this.setState({ text })}
@@ -64,9 +59,6 @@ export default class Start extends React.Component {
                   }}
                   onPress={() => {
                     this.setState({ screenColor: "#090C08" });
-                    // this.props.navigation.navigate("Chat", {
-                    //   screenColor: this.state.screenColor,
-                    // });
                   }}
                 ></TouchableOpacity>
                 <TouchableOpacity
@@ -78,9 +70,6 @@ export default class Start extends React.Component {
                   }}
                   onPress={() => {
                     this.setState({ screenColor: "#474056" });
-                    // this.props.navigation.navigate("Chat", {
-                    //   screenColor: this.state.screenColor,
-                    // });
                   }}
                 ></TouchableOpacity>
                 <TouchableOpacity
@@ -92,9 +81,6 @@ export default class Start extends React.Component {
                   }}
                   onPress={() => {
                     this.setState({ screenColor: "#8A95A5" });
-                    // this.props.navigation.navigate("Chat", {
-                    //   screenColor: this.state.screenColor,
-                    // });
                   }}
                 ></TouchableOpacity>
                 <TouchableOpacity
@@ -106,9 +92,6 @@ export default class Start extends React.Component {
                   }}
                   onPress={() => {
                     this.setState({ screenColor: "#B9C6AE" });
-                    // this.props.navigation.navigate("Chat", {
-                    //   screenColor: this.state.screenColor,
-                    // });
                   }}
                 ></TouchableOpacity>
               </View>
@@ -116,7 +99,6 @@ export default class Start extends React.Component {
 
             <TouchableOpacity
               style={styles.chatButton}
-              // style={{ fontSize: 30 }}
               color='#757083'
               onPress={() =>
                 this.props.navigation.navigate("Chat", {
@@ -184,9 +166,6 @@ const styles = StyleSheet.create({
   },
 
   backgroundSelectionText: {
-    // backgroundColor: "white",
-    // width: "100%",
-    // height: 100,
     fontSize: "16",
     fontWeight: "300",
     color: "#757083",
@@ -204,7 +183,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,
-    // justifyContent: "flex-end",
   },
   chatButtonText: {
     color: "#FFFFFF",

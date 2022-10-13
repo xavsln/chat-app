@@ -1,4 +1,5 @@
-![My Image](assets/app-screenshot.png)
+<!-- ![My Image](assets/app-screenshot.png) -->
+<img src="assets/app-screenshot.png" width="25%" />
 
 Chat App
 
@@ -22,7 +23,7 @@ This App is a **chat app** for mobile devices using **React Native**. The app wi
 
 # 3. How to get the project running
 
-This App can be executed from the terminal usng the following command: **`npm start`**.
+This App can be executed from the terminal using the following command: **`npm start`**.
 Then use Expo's instructions.
 
 ---
@@ -73,6 +74,7 @@ Then use Expo's instructions.
 - "react": "18.0.0",
 - "react-native": "0.69.6",
 - "react-native-gesture-handler": "~2.5.0",
+- "react-native-gifted-chat": "^1.0.4",
 - "react-native-reanimated": "~2.9.1",
 - "react-native-safe-area-context": "4.3.1",
 - "react-native-screens": "~3.15.0",

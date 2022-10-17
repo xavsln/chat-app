@@ -2,16 +2,52 @@ import React from "react";
 import { View, Text, StyleSheet, KeyboardAvoidingView } from "react-native";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 
+const firebase = require("firebase");
+require("firebase/firestore");
+
+// Web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAppRDsUUc3zgohRLglnXWjns0B3mVwmr8",
+  authDomain: "chat-app-a386f.firebaseapp.com",
+  projectId: "chat-app-a386f",
+  storageBucket: "chat-app-a386f.appspot.com",
+  messagingSenderId: "793264254907",
+  appId: "1:793264254907:web:d598bc9d803fcf958c9e9e",
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+
+// Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+
 export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
       messages: [],
     };
+
+    // if (!firebase.apps.length) {
+    //   firebase.initializeApp(firebaseConfig);
+    // }
+
+    this.referenceChatMessages = firebase.firestore().collection("messages");
   }
+
   componentDidMount() {
     let name = this.props.route.params.name;
     this.props.navigation.setOptions({ title: name });
+
+    this.referenceChatMessages = firebase.firestore().collection("messages");
+
+    this.unsubscribe = this.referenceChatMessages.onSnapshot(
+      this.onCollectionUpdate
+    );
 
     this.setState({
       messages: [
@@ -35,6 +71,10 @@ export default class Chat extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
   onSend(messages = []) {
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
@@ -53,6 +93,24 @@ export default class Chat extends React.Component {
       />
     );
   }
+
+  onCollectionUpdate = (querySnapshot) => {
+    const messages = [];
+    // go through each document
+    querySnapshot.forEach((doc) => {
+      // get the QueryDocumentSnapshot's data
+      let data = doc.data();
+      messages.push({
+        _id: data._id,
+        text: data.text,
+        createdAt: data.createdAt.toDate(),
+        user: data.user,
+      });
+    });
+    this.setState({
+      messages,
+    });
+  };
 
   render() {
     let { screenColor } = this.props.route.params;

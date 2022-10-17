@@ -1,84 +1,78 @@
 import React from "react";
 import { View, Text, StyleSheet, KeyboardAvoidingView } from "react-native";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebase = require("firebase");
 require("firebase/firestore");
-
-// Web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAppRDsUUc3zgohRLglnXWjns0B3mVwmr8",
-  authDomain: "chat-app-a386f.firebaseapp.com",
-  projectId: "chat-app-a386f",
-  storageBucket: "chat-app-a386f.appspot.com",
-  messagingSenderId: "793264254907",
-  appId: "1:793264254907:web:d598bc9d803fcf958c9e9e",
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
-// Initialize Firebase
-// const app = initializeApp(firebaseConfig);
 
 export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
       messages: [],
+      uid: 0,
+      loggedInText: "Please wait, you are getting logged in",
     };
 
-    // if (!firebase.apps.length) {
-    //   firebase.initializeApp(firebaseConfig);
-    // }
+    // Web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAppRDsUUc3zgohRLglnXWjns0B3mVwmr8",
+      authDomain: "chat-app-a386f.firebaseapp.com",
+      projectId: "chat-app-a386f",
+      storageBucket: "chat-app-a386f.appspot.com",
+      messagingSenderId: "793264254907",
+      appId: "1:793264254907:web:d598bc9d803fcf958c9e9e",
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
     this.referenceChatMessages = firebase.firestore().collection("messages");
   }
 
   componentDidMount() {
     let name = this.props.route.params.name;
+
+    // Set the title of the page as the name of the User
     this.props.navigation.setOptions({ title: name });
 
-    this.referenceChatMessages = firebase.firestore().collection("messages");
+    // Listen to autentication events
+    this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        firebase.auth().signInAnonymously();
+      }
+      this.setState({
+        uid: user.uid,
+        messages: [],
+        loggedInText: "Hello there",
+      });
 
-    this.unsubscribe = this.referenceChatMessages.onSnapshot(
-      this.onCollectionUpdate
-    );
-
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: "Hello developer",
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: "React Native",
-            avatar: "https://placeimg.com/140/140/any",
-          },
-        },
-        {
-          _id: 2,
-          text: `${name} entered in the chat`,
-          createdAt: new Date(),
-          system: true,
-        },
-      ],
+      // Creating a reference to ChatMessages collection
+      this.referenceChatMessages = firebase.firestore().collection("messages");
+      // Listen for collection changes
+      this.unsubscribe = this.referenceChatMessages
+        .orderBy("createdAt", "desc")
+        .onSnapshot(this.onCollectionUpdate);
     });
   }
 
   componentWillUnmount() {
+    // Stop listening for authentication
+    this.authUnsubscribe();
     this.unsubscribe();
   }
 
   onSend(messages = []) {
-    this.setState((previousState) => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
+    this.setState(
+      (previousState) => ({
+        messages: GiftedChat.append(previousState.messages, messages),
+      }),
+      () => {
+        this.addMessages();
+      }
+    );
   }
 
   renderBubble(props) {
@@ -86,6 +80,9 @@ export default class Chat extends React.Component {
       <Bubble
         {...props}
         wrapperStyle={{
+          left: {
+            backgroundColor: "white",
+          },
           right: {
             backgroundColor: "lightblue",
           },
@@ -112,6 +109,20 @@ export default class Chat extends React.Component {
     });
   };
 
+  // Add message to Firestore
+  addMessages() {
+    const message = this.state.messages[0];
+
+    // add a new message to the collection
+    this.referenceChatMessages.add({
+      uid: this.state.uid,
+      _id: message._id,
+      text: message.text,
+      createdAt: message.createdAt,
+      user: message.user,
+    });
+  }
+
   render() {
     let { screenColor } = this.props.route.params;
     return (
@@ -121,12 +132,16 @@ export default class Chat extends React.Component {
           backgroundColor: screenColor,
         }}
       >
+        <Text>{this.state.loggedInText}</Text>
         <GiftedChat
-          renderBubble={this.renderBubble.bind(this)}
+          // renderBubble={this.renderBubble.bind(this)}
+          showUserAvatar={true}
           messages={this.state.messages}
+          renderBubble={this.renderBuble}
           onSend={(messages) => this.onSend(messages)}
           user={{
-            _id: 1,
+            _id: this.state.uid,
+            avatar: "https://placeimg.com/140/140/people",
           }}
         />
 

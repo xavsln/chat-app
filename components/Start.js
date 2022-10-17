@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: "white",
-    fontSize: "45",
+    fontSize: 45,
     fontWeight: "600",
   },
   welcomeBox: {
@@ -154,10 +154,10 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 8,
     borderWidth: 1,
-    fontSize: "16",
+    fontSize: 16,
     fontWeight: "300",
     color: "#757083",
-    opacity: "50%",
+    // opacity: "50%",
     padding: "3%",
   },
 
@@ -166,15 +166,15 @@ const styles = StyleSheet.create({
   },
 
   backgroundSelectionText: {
-    fontSize: "16",
+    fontSize: 16,
     fontWeight: "300",
     color: "#757083",
-    opacity: "100%",
+    // opacity: "100%",
   },
 
   chatButton: {
     color: "red",
-    fontSize: "16",
+    fontSize: 16,
     fontWeight: "600",
 
     height: 50,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   chatButtonText: {
     color: "#FFFFFF",
-    fontSize: "16",
+    fontSize: 16,
     fontWeight: "600",
   },
 });

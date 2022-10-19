@@ -153,13 +153,13 @@ export default class Chat extends React.Component {
     );
   }
   // Only display the input tool bar when the User is connected
-  // renderInputToolbar(props) {
-  //   console.log(this.state.isConnected);
-  //   if (this.state.isConnected == false) {
-  //   } else {
-  //     return <InputToolbar {...props} />;
-  //   }
-  // }
+  renderInputToolbar(props) {
+    // console.log(this.state.isConnected);
+    if (this.state.isConnected == false) {
+    } else {
+      return <InputToolbar {...props} />;
+    }
+  }
 
   onCollectionUpdate = (querySnapshot) => {
     const messages = [];
@@ -204,11 +204,10 @@ export default class Chat extends React.Component {
       >
         <Text>{this.state.loggedInText}</Text>
         <GiftedChat
-          // renderBubble={this.renderBubble.bind(this)}
+          renderBubble={this.renderBubble.bind(this)}
           showUserAvatar={true}
           messages={this.state.messages}
-          renderBubble={this.renderBubble}
-          renderInputToolbar={this.renderInputToolbar}
+          renderInputToolbar={this.renderInputToolbar.bind(this)}
           onSend={(messages) => this.onSend(messages)}
           user={{
             _id: this.state.uid,

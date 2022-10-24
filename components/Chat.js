@@ -4,6 +4,9 @@ import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 
+// import action button
+import CustomActions from "./CustomActions";
+
 const firebase = require("firebase");
 require("firebase/firestore");
 
@@ -152,6 +155,7 @@ export default class Chat extends React.Component {
       />
     );
   }
+
   // Only display the input tool bar when the User is connected
   renderInputToolbar(props) {
     // console.log(this.state.isConnected);
@@ -193,6 +197,28 @@ export default class Chat extends React.Component {
     });
   }
 
+  renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     let { screenColor } = this.props.route.params;
     return (
@@ -208,6 +234,8 @@ export default class Chat extends React.Component {
           showUserAvatar={true}
           messages={this.state.messages}
           renderInputToolbar={this.renderInputToolbar.bind(this)}
+          renderActions={this.renderCustomActions}
+          renderCustomView={this.renderCustomView}
           onSend={(messages) => this.onSend(messages)}
           user={{
             _id: this.state.uid,

@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
-import { connectActionSheet } from "@expo/react-native-action-sheet";
+
 import React from "react";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 
 import * as Location from "expo-location";
-import MapView from "react-native-maps";
 
 export default class CustomActions extends React.Component {
   state = {
@@ -86,12 +86,16 @@ export default class CustomActions extends React.Component {
       "Send Location",
       "Cancel",
     ];
+
+    console.log("Custom actions button pressed");
+
     const cancelButtonIndex = options.length - 1;
-    this.context.actionSheet().showActionSheetWithOptions(
+    this.props.showActionSheetWithOptions(
       {
         options,
         cancelButtonIndex,
       },
+
       async (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
@@ -113,6 +117,7 @@ export default class CustomActions extends React.Component {
       <TouchableOpacity
         accessible={true}
         accessibilityLabel='More options'
+        accessibilityHint='Send an image or your geolocation.'
         style={[styles.container]}
         onPress={this.onActionPress}
       >
@@ -149,3 +154,5 @@ const styles = StyleSheet.create({
 CustomActions.contextTypes = {
   actionSheet: PropTypes.func,
 };
+
+CustomActions = connectActionSheet(CustomActions);

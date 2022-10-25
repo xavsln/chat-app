@@ -221,6 +221,7 @@ export default class Chat extends React.Component {
 
   render() {
     let { screenColor } = this.props.route.params;
+
     return (
       <View
         style={{
@@ -234,13 +235,13 @@ export default class Chat extends React.Component {
           showUserAvatar={true}
           messages={this.state.messages}
           renderInputToolbar={this.renderInputToolbar.bind(this)}
-          renderActions={this.renderCustomActions}
-          renderCustomView={this.renderCustomView}
           onSend={(messages) => this.onSend(messages)}
           user={{
             _id: this.state.uid,
             avatar: "https://placeimg.com/140/140/people",
           }}
+          renderActions={this.renderCustomActions.bind(this)}
+          renderCustomView={this.renderCustomView}
         />
 
         {/* To solve keyboard issues with some Android versions: */}

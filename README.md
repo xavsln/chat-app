@@ -1,5 +1,6 @@
 <!-- ![My Image](assets/app-screenshot.png) -->
-<img src="assets/app-screenshot.png" width="25%" />
+<img src="assets/app-screenshot-1.png" width="25%" />
+<img src="assets/app-screenshot-2.png" width="25%" />
 
 Chat App
 
@@ -7,7 +8,7 @@ Chat App
 
 # 1. Project description
 
-This App is a **chat app** for mobile devices using **React Native**. The app will provide users with a chat interface and options to **share images** and **their location**.
+This App is a **chat app** for mobile devices using **React Native**. The app provides users with a chat interface and options to **share images** and **their location**.
 
 ---
 
@@ -23,8 +24,14 @@ This App is a **chat app** for mobile devices using **React Native**. The app wi
 
 # 3. How to get the project running
 
-This App can be executed from the terminal using the following command: **`npm start`**.
-Then use Expo's instructions.
+You can run the Project using either Apple XCode simulator, Android Studio or your device.
+In order to do so you would need to install Expo CLI (as well as Expo Go in case you want to run directly the App on your device).
+
+- Clone the current repository: `git clone https://github.com/xavsln/chat-app.git`
+- Install Expo CLI as a global npm package: `npm install --global expo-cli`
+- Install all Project dependecies: `npm install`
+- Start the Project: `npm start` or `expo start`
+- Follow expo CLI's instructions depending on your preference regarding simulator (Apple XCode simulator, Android Studio or your Expo Go to run the App on your own device)
 
 ---
 
@@ -66,24 +73,27 @@ Then use Expo's instructions.
 
 # 7. Project main dependencies
 
+- "@expo/react-native-action-sheet": "^3.14.0",
+- "@react-native-async-storage/async-storage": "^1.17.10",
 - "@react-native-community/masked-view": "^0.1.11",
+- "@react-native-community/netinfo": "9.3.0",
 - "@react-navigation/native": "^6.0.13",
 - "@react-navigation/stack": "^6.3.2",
+- "core-js": "^3.25.5",
 - "expo": "~46.0.13",
+- "expo-image-picker": "~13.3.1",
+- "expo-location": "~14.3.0",
+- "expo-permissions": "~13.2.0",
 - "expo-status-bar": "~1.4.0",
+- "firebase": "^8.2.3",
 - "react": "18.0.0",
 - "react-native": "0.69.6",
 - "react-native-gesture-handler": "~2.5.0",
 - "react-native-gifted-chat": "^1.0.4",
+- "react-native-maps": "0.31.1",
 - "react-native-reanimated": "~2.9.1",
 - "react-native-safe-area-context": "4.3.1",
 - "react-native-screens": "~3.15.0",
 - "react-navigation": "^4.4.4"
-
----
-
-# 8. Online version
-
-- Online version: [TBD]
 
 ---

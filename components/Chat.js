@@ -8,6 +8,8 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 // import action button
 import CustomActions from "./CustomActions";
 
+import MapView from "react-native-maps";
+
 const firebase = require("firebase");
 require("firebase/firestore");
 
@@ -19,6 +21,8 @@ export default class Chat extends React.Component {
       uid: 0,
       loggedInText: "Please wait, you are getting logged in",
       isConnected: false,
+      image: null,
+      location: null,
     };
 
     // Web app's Firebase configuration
@@ -177,6 +181,8 @@ export default class Chat extends React.Component {
         text: data.text,
         createdAt: data.createdAt.toDate(),
         user: data.user,
+        image: data.image || null,
+        location: data.location || null,
       });
     });
     this.setState({
@@ -192,9 +198,11 @@ export default class Chat extends React.Component {
     this.referenceChatMessages.add({
       uid: this.state.uid,
       _id: message._id,
-      text: message.text,
+      text: message.text || "",
       createdAt: message.createdAt,
       user: message.user,
+      image: message.image || null,
+      location: message.location || null,
     });
   }
 

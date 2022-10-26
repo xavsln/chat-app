@@ -9,25 +9,24 @@ import * as ImagePicker from "expo-image-picker";
 
 import * as Location from "expo-location";
 
-export default class CustomActions extends React.Component {
-  state = {
-    image: null,
-    location: null,
-  };
+import firebase from "firebase";
+import "firebase/firestore";
+// import firestore from "firebase";
 
+export default class CustomActions extends React.Component {
   imagePicker = async () => {
-    // expo permission
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    console.log("Status from imagePicker: ", { status });
     try {
       if (status === "granted") {
-        // pick image
         const result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images, // only images are allowed
         }).catch((error) => console.log(error));
-        // canceled process
+        console.log("Result: ", result);
         if (!result.cancelled) {
           const imageUrl = await this.uploadImageFetch(result.uri);
           this.props.onSend({ image: imageUrl });
+          // console.log("from image picker function: ", { image });
         }
       }
     } catch (error) {
@@ -36,15 +35,18 @@ export default class CustomActions extends React.Component {
   };
 
   takePhoto = async () => {
-    const { status } = await Permissions.askAsync(
-      Permissions.CAMERA,
-      Permissions.CAMERA_ROLL
-    );
+    // const { status } = await Permissions.askAsync(
+    //   Permissions.CAMERA,
+    //   Permissions.MEDIA_LIBRARY
+    // );
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     try {
       if (status === "granted") {
         const result = await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
         }).catch((error) => console.log(error));
+
+        // console.log("Result: ", result);
 
         if (!result.cancelled) {
           const imageUrl = await this.uploadImageFetch(result.uri);
@@ -58,13 +60,16 @@ export default class CustomActions extends React.Component {
 
   getLocation = async () => {
     try {
-      const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      // const { status } = await Permissions.askAsync(
+      //   Permissions.LOCATION_FOREGROUND
+      // );
+      const { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
         const result = await Location.getCurrentPositionAsync({}).catch(
           (error) => console.log(error)
         );
-        const longitude = JSON.stringify(result.coords.longitude);
-        const altitude = JSON.stringify(result.coords.latitude);
+        // const longitude = JSON.stringify(result.coords.longitude);
+        // const altitude = JSON.stringify(result.coords.latitude);
         if (result) {
           this.props.onSend({
             location: {
@@ -79,6 +84,37 @@ export default class CustomActions extends React.Component {
     }
   };
 
+  // Upload images to firebase
+
+  uploadImageFetch = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    // Create a reference in Firebase
+    const imageNameBefore = uri.split("/");
+    const imageName = imageNameBefore[imageNameBefore.length - 1];
+
+    const ref = firebase.storage().ref().child(`images/${imageName}`);
+
+    const snapshot = await ref.put(blob);
+
+    blob.close();
+
+    return await snapshot.ref.getDownloadURL();
+  };
+
+  // Function that handles communication features
   onActionPress = () => {
     const options = [
       "Choose From Library",
